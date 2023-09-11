@@ -30,4 +30,7 @@ interface UserDao {
 
     @Query("DELETE FROM userData WHERE id = :id")
     fun deleteUser(id: String)
+
+    @Query("SELECT SUM(creditAmount+depositAmount) FROM userData")
+    fun getTotalOfSum():Int
 }
