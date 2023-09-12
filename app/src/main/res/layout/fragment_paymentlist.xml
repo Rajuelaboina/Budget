@@ -41,7 +41,7 @@
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="384dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="6dp"
@@ -58,9 +58,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_weight="0"
-                android:text="Total   =  \u20B9   "
-                android:textColor="@color/red"
-                android:textSize="30sp"
+                android:text="Available Balance   = "
+                android:textColor="@color/green"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -71,8 +71,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:text="0"
-                android:textColor="@color/red"
-                android:textSize="30sp"
+                android:textColor="@color/green"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
         <ProgressBar

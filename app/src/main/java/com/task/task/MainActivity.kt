@@ -1,32 +1,32 @@
 package com.task.task
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.task.task.databinding.ActivityMainBinding
 import com.task.task.databinding.DialogBankBinding
-import com.task.task.databinding.DialogUserdataBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     lateinit var bindingBank: DialogBankBinding
-
-
+   /* private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference*/
+    lateinit var pushId :String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+       /* firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
+        databaseReference=  firebaseDatabase.reference.child("BankExpenses")
+*/
+
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -65,7 +70,10 @@ class MainActivity : AppCompatActivity() {
                             if (!boolean){
                                 UserDataBase.getInstance(applicationContext).userDao().insertBank(
                                     BankNames(0, bindingBank.editTextBankName.text.toString().trim()) )
+                               // pushId = databaseReference.push().getKey()!!
+                               // databaseReference.child("BankNames").child(pushId).child("bankName").setValue(bindingBank.editTextBankName.text.toString().trim())
                                 bindingBank.editTextBankName.setText("")
+
                             }else{
                                 showToast()
 

@@ -4,12 +4,15 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.task.task.databinding.DialogUserdataBinding
 import com.task.task.databinding.FragmentPaymentlistBinding
 import kotlinx.coroutines.CoroutineScope
@@ -26,9 +30,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+
 class PaymentListFragment : Fragment(), OnItemListener {
 
     private var _binding: FragmentPaymentlistBinding? = null
@@ -38,6 +40,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
     private val binding get() = _binding!!
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
+    lateinit var firebaseFireStore : FirebaseFirestore
     lateinit var bindingUserData: DialogUserdataBinding
     var date = ""
     var year = 0
@@ -46,6 +49,9 @@ class PaymentListFragment : Fragment(), OnItemListener {
     var bankName = ""
     var paymentList = ArrayList<UserData>()
     var banknameList = mutableListOf<String>()
+    var creditValue = 0.0
+    var withdrawValue  = 0.0
+
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProvider(this)[BankNamesViewModel::class.java]
         _binding = FragmentPaymentlistBinding.inflate(inflater, container, false)
@@ -59,8 +65,34 @@ class PaymentListFragment : Fragment(), OnItemListener {
         super.onViewCreated(view, savedInstanceState)
         firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
        //databaseReference= firebaseDatabase.getReference("banknames")
+
         binding.linearLayout2.visibility = View.INVISIBLE
         getAllListData()
+
+        /*databaseReference=  firebaseDatabase.reference.child("BankExpenses").child("BankNames")
+        FirebaseApp.initializeApp(requireContext())
+         firebaseFireStore = FirebaseFirestore.getInstance()
+         firebaseFireStore.collection("BankNames").get().addOnSuccessListener {
+             var banknamesList = mutableListOf<BankNames>()
+             for (document in it) {
+                // val users = document.toObject(BName::class.java)
+                 Log.d("RRRRRRRRRRRRRRRR<>>>>>>>>>>>>", "${document.id} => ${document.data}")
+
+                 val bankname = document.getString("bankname")
+
+                 banknameList.add(bankname.toString())
+                 val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,banknameList)
+                 bindingUserData.spinnerMonth.adapter = adapter
+                 adapter.notifyDataSetChanged()
+                *//* val ad = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,banknameList)
+                 bindingUserData.autoCompleteTextView.setAdapter(ad)
+                 ad.notifyDataSetChanged()*//*
+             }
+             banknamesList.forEach {
+                 Log.d("RRRR List", "${it}")
+             }
+
+         }*/
 
         binding.fab.setOnClickListener { view ->
            showPaymentDialog(-1)
@@ -114,7 +146,10 @@ class PaymentListFragment : Fragment(), OnItemListener {
         val formattedDate = df.format(c.time)
         bindingUserData.editTextDate.setText(formattedDate)
 
-
+       /* fire store data
+        val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,banknameList)
+        bindingUserData.spinnerMonth.adapter = adapter
+        adapter.notifyDataSetChanged()*/
         viewModel.getBankNames(requireContext())
         viewModel.list.observe(this){
             val adapter = BankSpinnerAdapter(requireContext(),it)
@@ -123,7 +158,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
             for (x in it.indices ){
                 banknameList.add(it[x].name)
             }
-            Log.e("SIZE","${banknameList.size}")
+            //Log.e("SIZE","${banknameList.size}")
             if (position != -1) {
                 for (x in banknameList.indices) {
                     if (paymentList[position].bankname == banknameList[x].toString()) {
@@ -135,13 +170,51 @@ class PaymentListFragment : Fragment(), OnItemListener {
         }
 
 
+
         if (position != -1){
+
+               /* for (x in banknameList.indices) {
+                    if (paymentList[position].bankname == banknameList[x]) {
+                        bindingUserData.spinnerMonth.setSelection(x)
+                        break
+                    }
+                } */
             bindingUserData.savePayment.setText("Update")
             bindingUserData.editTextCredit.setText(paymentList[position].creditAmount.toString())
-            bindingUserData.editTextDeposit.setText(paymentList[position].depositAmount.toString())
+            bindingUserData.editTextwithdraw.setText(paymentList[position].withdrawAmount.toString())
+            bindingUserData.editTextAvailable.setText(paymentList[position].availableAmount.toString())
             bindingUserData.editTextDate.setText(paymentList[position].date)
-
         }
+        bindingUserData.editTextwithdraw.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isNotEmpty()) {
+                    withdrawValue = s.toString().trim().toDouble()
+                    showTotal(bindingUserData.editTextAvailable)
+                }else if (s.toString().isEmpty()){
+                    withdrawValue = 0.0
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
+        bindingUserData.editTextCredit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isNotEmpty()) {
+                    creditValue = s.toString().trim().toDouble()
+                    showTotal(bindingUserData.editTextAvailable)
+                }else if (s.toString().isEmpty()){
+                    withdrawValue = 0.0
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
 
 
         bindingUserData.spinnerMonth.onItemSelectedListener = object :OnItemSelectedListener{
@@ -162,9 +235,11 @@ class PaymentListFragment : Fragment(), OnItemListener {
                     CoroutineScope(IO).launch {
                         UserDataBase.getInstance(requireContext()).userDao().updateUserData(
                             UserData(
-                                paymentList[position].id,bindingUserData.editTextCredit.text.toString().trim().toDouble(),
-                                bindingUserData.editTextDeposit.text.toString().trim().toDouble(),
+                                paymentList[position].id,
                                 bankName,
+                                bindingUserData.editTextCredit.text.toString().trim().toDouble(),
+                                bindingUserData.editTextwithdraw.text.toString().trim().toDouble(),
+                                bindingUserData.editTextAvailable.text.toString().trim().toDouble(),
                                 bindingUserData.editTextDate.text.toString().trim())
                         )
                     }
@@ -172,11 +247,25 @@ class PaymentListFragment : Fragment(), OnItemListener {
                     CoroutineScope(IO).launch {
                         UserDataBase.getInstance(requireContext()).userDao().insertUserData(
                             UserData(
-                                0,bindingUserData.editTextCredit.text.toString().trim().toDouble(),
-                                bindingUserData.editTextDeposit.text.toString().trim().toDouble(),
+                                0,
                                 bankName,
+                                creditValue,
+                                withdrawValue,
+                                bindingUserData.editTextAvailable.text.toString().trim().toDouble(),
                                 bindingUserData.editTextDate.text.toString().trim() )
                         )
+                        //firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
+                        /*databaseReference=  firebaseDatabase.reference.child("BankExpenses")
+                        val pushId = databaseReference.push().getKey()
+                        databaseReference.child(pushId.toString()).setValue( UserData(
+                            0,bindingUserData.editTextCredit.text.toString().trim().toDouble(),
+                            bindingUserData.editTextDeposit.text.toString().trim().toDouble(),
+                            bankName,
+                            bindingUserData.editTextDate.text.toString().trim() )
+                        )
+*/
+
+
                     }
                 }
 
@@ -190,6 +279,12 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
 
         userDialog.show()
+    }
+
+    // show total from credit and withdraw
+    private fun showTotal(editTextTotal: TextView) {
+         val t = creditValue.minus(withdrawValue)
+        editTextTotal.setText(t.toString())
     }
 
     // dialog show on date selection
@@ -220,24 +315,38 @@ class PaymentListFragment : Fragment(), OnItemListener {
     }
 
     private fun getAllListData() {
-       viewModel.getAllUsersData(requireContext())
+        viewModel.getAllUsersData(requireContext())
+        viewModel.getTotal(requireContext())
+        /*viewModel.getBankNames(requireContext())
+        viewModel.listBr.observe(this){
+            binding.progressBar2.visibility = View.GONE
+            banknameList = it as MutableList<String>
+            binding.linearLayout2.visibility = View.VISIBLE
+
+
+        }*/
 
         viewModel.userlist.observe(this){
-            binding.progressBar2.visibility = View.GONE
-           if (it.size !=0) {
-               viewModel.setAdapter(it)
-               paymentList = it as ArrayList<UserData>
-               binding.linearLayout2.visibility = View.VISIBLE
-           }
+             binding.progressBar2.visibility = View.GONE
+            if (it.size !=0) {
+                viewModel.setAdapter(it)
+                paymentList = it as ArrayList<UserData>
+                binding.linearLayout2.visibility = View.VISIBLE
+            }
         }
 
-        viewModel.getTotal(requireContext())
+
         viewModel.list2.observe(this){
             Log.e("TOTAL","Total: ${it[0]}")
             if (it.isNotEmpty()) {
                 binding.textView6.text = it[0].toString()
             }
         }
+
+
+
+
+
     }
 
     override fun onDestroyView() {

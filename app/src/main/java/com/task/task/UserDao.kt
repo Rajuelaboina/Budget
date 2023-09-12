@@ -22,7 +22,7 @@ interface UserDao {
     @Query("SELECT SUM(creditAmount) FROM userData")
     fun getSum(): Int
 
-    @Query("SELECT SUM(depositAmount) FROM userData")
+    @Query("SELECT SUM(withdrawAmount) FROM userData")
     fun getSum2(): Int
 
     @Update
@@ -31,6 +31,6 @@ interface UserDao {
     @Query("DELETE FROM userData WHERE id = :id")
     fun deleteUser(id: String)
 
-    @Query("SELECT SUM(creditAmount+depositAmount) FROM userData")
+    @Query("SELECT SUM(availableAmount) FROM userData")
     fun getTotalOfSum():Int
 }

@@ -11,14 +11,17 @@ data class UserData(
     @ColumnInfo(name = "id")
     var id: Int,
 
+    @ColumnInfo(name = "bankname")
+    val bankname:String,
+
     @ColumnInfo(name = "creditAmount")
     val creditAmount: Double,
 
-    @ColumnInfo(name = "depositAmount")
-    val depositAmount:Double,
+    @ColumnInfo(name = "withdrawAmount")
+    val withdrawAmount:Double,
 
-    @ColumnInfo(name = "bankname")
-    val bankname:String,
+    @ColumnInfo(name = "availableAmount")
+    val availableAmount:Double,
 
     @ColumnInfo(name = "date")
     val date:String
