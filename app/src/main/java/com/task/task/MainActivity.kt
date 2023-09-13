@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
          when (item.itemId) {
             R.id.action_settings ->
             {
-             val dialog = BottomSheetDialog(this@MainActivity)
+             val dialog = BottomSheetDialog(this@MainActivity,R.style.AppBottomSheetDialogTheme)
                 bindingBank = DialogBankBinding.inflate(layoutInflater)
                 dialog.setContentView(bindingBank.root)
                 bindingBank.saveBankName.setOnClickListener {

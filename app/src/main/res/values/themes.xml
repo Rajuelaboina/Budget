@@ -12,6 +12,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+       <!-- <item name="android:textViewStyle">@style/myTextViewStyle</item>
+        <item name="android:buttonStyle">@style/myButtonStyle</item>
+        <item name="android:editTextStyle">@style/myEditTextStyle</item>-->
     </style>
 
     <style name="Theme.Task.NoActionBar">
@@ -70,5 +73,52 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:layout_marginEnd">10dp</item>
+    </style>
+
+    <style name="customTextView"  parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="backgroundColor">@color/red</item>
+    </style>
+
+
+    <style name="myTextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">#0987EC</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="myButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:textColor">#00ff00</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="myEditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">#00ff00</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/background</item>
     </style>
 </resources>

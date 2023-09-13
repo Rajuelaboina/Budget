@@ -3,6 +3,7 @@ package com.task.task
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.task.task.databinding.PaymentlistItemBinding
@@ -26,6 +27,12 @@ class PaymentListAdapter : RecyclerView.Adapter<PaymentListAdapter.MyViewHolder>
         holder.bind(list[position])
         holder.itemView.setOnClickListener {
             myListener.onItemClicked(list[position],position)
+        }
+        val t = list[position].availableAmount
+        if (t > 0){
+            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+        }else if (t<0){
+            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.red))
         }
     }
 

@@ -7,15 +7,17 @@
         <variable
             name="model"
             type="com.task.task.UserData" />
+        <variable
+            name="util"
+            type="com.task.task.DateUtils" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginBottom="2dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +48,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{model.date}"
+                    android:text="@{util.Companion.getMonthName(model.date)}"
                     android:textSize="18sp"
                     android:maxLines="1"/>
             </LinearLayout>
@@ -163,6 +165,6 @@
                     android:textColor="@color/green"/>
             </LinearLayout>
 
-      </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

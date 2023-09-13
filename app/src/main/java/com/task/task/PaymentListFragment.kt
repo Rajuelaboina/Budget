@@ -14,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -133,9 +134,10 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
     // dialog show on inset data OR Edit data
     private fun showPaymentDialog(position: Int) {
-        val userDialog = BottomSheetDialog(requireContext())
+        val userDialog = BottomSheetDialog(requireContext(),R.style.AppBottomSheetDialogTheme)
         bindingUserData = DialogUserdataBinding.inflate(layoutInflater)
         userDialog.setContentView(bindingUserData.root)
+        bindingUserData.textViewRentPaymentDialogTitle .text = DateUtils.setSpannable(requireActivity(),"Payment of Saving",0,7,14)
 
         // get the current date and format
         val c: Calendar = Calendar.getInstance()
@@ -189,11 +191,13 @@ class PaymentListFragment : Fragment(), OnItemListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.e("SSSSS","s:${s.toString().length}")
                 if (s.toString().isNotEmpty()) {
                     withdrawValue = s.toString().trim().toDouble()
                     showTotal(bindingUserData.editTextAvailable)
                 }else if (s.toString().isEmpty()){
                     withdrawValue = 0.0
+                    showTotal(bindingUserData.editTextAvailable)
                 }
             }
             override fun afterTextChanged(s: Editable?) {
@@ -209,6 +213,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
                     showTotal(bindingUserData.editTextAvailable)
                 }else if (s.toString().isEmpty()){
                     withdrawValue = 0.0
+                    showTotal(bindingUserData.editTextAvailable)
                 }
             }
             override fun afterTextChanged(s: Editable?) {
@@ -264,20 +269,14 @@ class PaymentListFragment : Fragment(), OnItemListener {
                             bindingUserData.editTextDate.text.toString().trim() )
                         )
 */
-
-
                     }
                 }
-
                 userDialog.dismiss()
                 getAllListData()
             }else{
                 Toast.makeText(requireContext(),"Fields are not empty",Toast.LENGTH_LONG).show()
             }
-
         }
-
-
         userDialog.show()
     }
 
@@ -285,6 +284,11 @@ class PaymentListFragment : Fragment(), OnItemListener {
     private fun showTotal(editTextTotal: TextView) {
          val t = creditValue.minus(withdrawValue)
         editTextTotal.setText(t.toString())
+        if (t > 0){
+            bindingUserData.editTextAvailable.setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
+        }else if (t<0){
+          bindingUserData.editTextAvailable.setTextColor(ContextCompat.getColor(requireContext(),R.color.red))
+        }
     }
 
     // dialog show on date selection

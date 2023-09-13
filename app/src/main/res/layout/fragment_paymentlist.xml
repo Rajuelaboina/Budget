@@ -12,18 +12,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".PaymentListFragment"
-        android:background="@color/ash">
+        android:background="@color/ash"
+        tools:context=".PaymentListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="402dp"
-            android:layout_height="762dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
             android:adapter="@{viewModel.getAdapter()}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
             tools:listitem="@layout/paymentlist_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -33,19 +38,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="4dp"
+            android:layout_marginBottom="30dp"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="384dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="6dp"
-            android:background="@drawable/background"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/white"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +64,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_weight="0"
-                android:text="Available Balance   = "
+                android:text="Available Total   = "
                 android:textColor="@color/green"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -75,6 +81,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progressBar2"
             style="?android:attr/progressBarStyle"
@@ -82,7 +89,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.51"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
