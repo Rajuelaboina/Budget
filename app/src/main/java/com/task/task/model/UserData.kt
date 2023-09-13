@@ -1,4 +1,4 @@
-package com.task.task
+package com.task.task.model
 
 import android.icu.util.CurrencyAmount
 import androidx.room.ColumnInfo

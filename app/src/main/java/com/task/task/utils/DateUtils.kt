@@ -1,4 +1,4 @@
-package com.task.task
+package com.task.task.utils
 
 import android.os.Build
 import android.text.Spannable
@@ -7,6 +7,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.task.task.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -115,7 +116,9 @@ class DateUtils {
        fun setSpannable(activity: FragmentActivity, string: String, sp1: Int, sp2: Int, sp3: Int): SpannableString {
            val spannable = SpannableString(string)
            spannable.setSpan(UnderlineSpan(),0,spannable.length,0)
-           val foregroundSpan = ForegroundColorSpan(ContextCompat.getColor(activity, R.color.purple_700))
+           val foregroundSpan = ForegroundColorSpan(ContextCompat.getColor(activity,
+               R.color.purple_700
+           ))
            spannable.setSpan(foregroundSpan,sp1, sp2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
            val foregroundSpan2 = ForegroundColorSpan(ContextCompat.getColor(activity, R.color.red))
            spannable.setSpan(foregroundSpan2, sp2, string.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

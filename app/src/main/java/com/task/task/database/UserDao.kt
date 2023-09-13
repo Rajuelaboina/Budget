@@ -1,6 +1,8 @@
-package com.task.task
+package com.task.task.database
 
 import androidx.room.*
+import com.task.task.model.BankNames
+import com.task.task.model.UserData
 
 @Dao
 interface UserDao {

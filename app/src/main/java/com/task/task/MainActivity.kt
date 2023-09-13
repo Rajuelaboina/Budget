@@ -10,10 +10,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.task.task.database.UserDataBase
 import com.task.task.databinding.ActivityMainBinding
 import com.task.task.databinding.DialogBankBinding
+import com.task.task.model.BankNames
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var bindingBank: DialogBankBinding
    /* private lateinit var firebaseDatabase: FirebaseDatabase
-    private lateinit var databaseReference: DatabaseReference*/
-    lateinit var pushId :String
+    private lateinit var databaseReference: DatabaseReference
+    lateinit var pushId :String */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,13 +46,11 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -60,36 +58,39 @@ class MainActivity : AppCompatActivity() {
          when (item.itemId) {
             R.id.action_settings ->
             {
-             val dialog = BottomSheetDialog(this@MainActivity,R.style.AppBottomSheetDialogTheme)
-                bindingBank = DialogBankBinding.inflate(layoutInflater)
-                dialog.setContentView(bindingBank.root)
-                bindingBank.saveBankName.setOnClickListener {
-                    if (bindingBank.editTextBankName.text.toString().trim().isNotEmpty()) {
-                        CoroutineScope(IO).launch {
-                            val boolean = UserDataBase.getInstance(applicationContext).userDao().isBankExists(bindingBank.editTextBankName.text.toString().trim())
-                            if (!boolean){
-                                UserDataBase.getInstance(applicationContext).userDao().insertBank(
-                                    BankNames(0, bindingBank.editTextBankName.text.toString().trim()) )
-                               // pushId = databaseReference.push().getKey()!!
-                               // databaseReference.child("BankNames").child(pushId).child("bankName").setValue(bindingBank.editTextBankName.text.toString().trim())
-                                bindingBank.editTextBankName.setText("")
+                showUserDialog()
+            }
+        }
+        return true
+    }
+      // add the bank name
+    private fun showUserDialog() {
+        val dialog = BottomSheetDialog(this@MainActivity,R.style.AppBottomSheetDialogTheme)
+        bindingBank = DialogBankBinding.inflate(layoutInflater)
+        dialog.setContentView(bindingBank.root)
+        bindingBank.saveBankName.setOnClickListener {
+            if (bindingBank.editTextBankName.text.toString().trim().isNotEmpty()) {
+                CoroutineScope(IO).launch {
+                    val boolean = UserDataBase.getInstance(applicationContext).userDao().isBankExists(bindingBank.editTextBankName.text.toString().trim())
+                    if (!boolean){
+                        UserDataBase.getInstance(applicationContext).userDao().insertBank(
+                            BankNames(0, bindingBank.editTextBankName.text.toString().trim()) )
+                        // pushId = databaseReference.push().getKey()!!
+                        // databaseReference.child("BankNames").child(pushId).child("bankName").setValue(bindingBank.editTextBankName.text.toString().trim())
+                        bindingBank.editTextBankName.setText("")
 
-                            }else{
-                                showToast()
-
-                            }
-
-                        }
                     }else{
-                        Toast.makeText(applicationContext,"field is not empty",Toast.LENGTH_LONG).show()
+                        showToast()
+
                     }
 
                 }
-                dialog.show()
+            }else{
+                Toast.makeText(applicationContext,"field is not empty",Toast.LENGTH_LONG).show()
             }
 
         }
-        return true
+        dialog.show()
     }
 
     private fun showToast() {

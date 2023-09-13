@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:paddingStart="10dp"
+        android:paddingEnd="1dp"
         android:layout_gravity="start"
         android:id="@+id/text"/>
 </LinearLayout>

@@ -6,10 +6,10 @@
 
         <variable
             name="model"
-            type="com.task.task.UserData" />
+            type="com.task.task.model.UserData" />
         <variable
             name="util"
-            type="com.task.task.DateUtils" />
+            type="com.task.task.utils.DateUtils" />
     </data>
 
     <androidx.cardview.widget.CardView

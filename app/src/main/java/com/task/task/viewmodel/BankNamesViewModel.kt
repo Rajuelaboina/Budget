@@ -1,15 +1,16 @@
-package com.task.task
+package com.task.task.viewmodel
 
-import android.R
 import android.content.Context
-import android.util.Log
-import android.widget.ArrayAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.task.task.adapter.PaymentListAdapter
+import com.task.task.database.UserDataBase
+import com.task.task.model.BankNames
+import com.task.task.model.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

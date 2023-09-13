@@ -1,4 +1,4 @@
-package com.task.task
+package com.task.task.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.task.task.R
+import com.task.task.model.BankNames
 
 class BankSpinnerAdapter(val context: Context, var dataSource: List<BankNames>) : BaseAdapter() {
 
@@ -23,7 +25,7 @@ class BankSpinnerAdapter(val context: Context, var dataSource: List<BankNames>) 
             view = convertView
             vh = view.tag as ItemHolder
         }
-        vh.label.text = dataSource.get(position).name
+        vh.label.text = dataSource[position].name
 
        // val id = context.resources.getIdentifier(dataSource.get(position).url, "drawable", context.packageName)
        // vh.img.setBackgroundResource(id)
@@ -31,16 +33,16 @@ class BankSpinnerAdapter(val context: Context, var dataSource: List<BankNames>) 
         return view
     }
 
-    override fun getItem(position: Int): Any? {
-        return dataSource[position];
+    override fun getItem(position: Int): Any {
+        return dataSource[position]
     }
 
     override fun getCount(): Int {
-        return dataSource.size;
+        return dataSource.size
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong();
+        return position.toLong()
     }
 
     private class ItemHolder(row: View?) {

@@ -1,5 +1,6 @@
 package com.task.task
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
@@ -13,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,9 +22,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
-import com.google.firebase.firestore.FirebaseFirestore
+import com.task.task.adapter.BankSpinnerAdapter
+import com.task.task.adapter.PaymentListAdapter
+import com.task.task.database.UserDataBase
 import com.task.task.databinding.DialogUserdataBinding
 import com.task.task.databinding.FragmentPaymentlistBinding
+import com.task.task.listeners.OnItemListener
+import com.task.task.model.UserData
+import com.task.task.utils.DateUtils
+import com.task.task.utils.SwipeLeftDeleteCallback
+import com.task.task.viewmodel.BankNamesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -40,20 +47,20 @@ class PaymentListFragment : Fragment(), OnItemListener {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var firebaseDatabase: FirebaseDatabase
-    private lateinit var databaseReference: DatabaseReference
-    lateinit var firebaseFireStore : FirebaseFirestore
-    lateinit var bindingUserData: DialogUserdataBinding
-    var date = ""
-    var year = 0
-    var month = 0
-    var day = 0
-    var bankName = ""
-    var paymentList = ArrayList<UserData>()
-    var banknameList = mutableListOf<String>()
-    var creditValue = 0.0
-    var withdrawValue  = 0.0
+   /// private lateinit var databaseReference: DatabaseReference
+   // private lateinit var firebaseFireStore : FirebaseFirestore
+    private lateinit var bindingUserData: DialogUserdataBinding
+    private var date = ""
+    private var year = 0
+    private var month = 0
+    private var day = 0
+    private var bankName = ""
+    private var paymentList = ArrayList<UserData>()
+    private var banknameList = mutableListOf<String>()
+    private var creditValue = 0.0
+    private var withdrawValue  = 0.0
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[BankNamesViewModel::class.java]
         _binding = FragmentPaymentlistBinding.inflate(inflater, container, false)
         binding.viewModel =viewModel
@@ -95,8 +102,8 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
          }*/
 
-        binding.fab.setOnClickListener { view ->
-           showPaymentDialog(-1)
+        binding.fab.setOnClickListener {
+            showPaymentDialog(-1)
          }
         PaymentListAdapter.setOnItemSelectedListener(this)
         val swipeHandler = object : SwipeLeftDeleteCallback(requireActivity()) {
@@ -119,7 +126,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
                         // DisplayAllUsers()
                     }
                     .show()
-                Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                Handler(Looper.getMainLooper()).postDelayed({
                    binding.progressBar2.visibility = View.GONE
                     getAllListData()
 
@@ -133,6 +140,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
     }
 
     // dialog show on inset data OR Edit data
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun showPaymentDialog(position: Int) {
         val userDialog = BottomSheetDialog(requireContext(),R.style.AppBottomSheetDialogTheme)
         bindingUserData = DialogUserdataBinding.inflate(layoutInflater)
@@ -163,7 +171,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
             //Log.e("SIZE","${banknameList.size}")
             if (position != -1) {
                 for (x in banknameList.indices) {
-                    if (paymentList[position].bankname == banknameList[x].toString()) {
+                    if (paymentList[position].bankname == banknameList[x]) {
                         bindingUserData.spinnerMonth.setSelection(x)
                         break
                     }
@@ -181,7 +189,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
                         break
                     }
                 } */
-            bindingUserData.savePayment.setText("Update")
+            bindingUserData.savePayment.text = "Update"
             bindingUserData.editTextCredit.setText(paymentList[position].creditAmount.toString())
             bindingUserData.editTextwithdraw.setText(paymentList[position].withdrawAmount.toString())
             bindingUserData.editTextAvailable.setText(paymentList[position].availableAmount.toString())
@@ -191,7 +199,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.e("SSSSS","s:${s.toString().length}")
+             //   Log.e("SSSSS","s:${s.toString().length}")
                 if (s.toString().isNotEmpty()) {
                     withdrawValue = s.toString().trim().toDouble()
                     showTotal(bindingUserData.editTextAvailable)
@@ -235,7 +243,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
         }
 
         bindingUserData.savePayment.setOnClickListener {
-            if (bindingUserData.editTextCredit.text.toString().trim().isNotEmpty() && bindingUserData.editTextCredit.text.toString().isNotEmpty() && bindingUserData.editTextDate.text.toString().trim().isNotEmpty()){
+            //if (bindingUserData.editTextCredit.text.toString().trim().isNotEmpty() && bindingUserData.editTextCredit.text.toString().isNotEmpty() && bindingUserData.editTextDate.text.toString().trim().isNotEmpty()){
                 if (position != -1){
                     CoroutineScope(IO).launch {
                         UserDataBase.getInstance(requireContext()).userDao().updateUserData(
@@ -273,9 +281,9 @@ class PaymentListFragment : Fragment(), OnItemListener {
                 }
                 userDialog.dismiss()
                 getAllListData()
-            }else{
+           /* }else{
                 Toast.makeText(requireContext(),"Fields are not empty",Toast.LENGTH_LONG).show()
-            }
+            }*/
         }
         userDialog.show()
     }
@@ -283,7 +291,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
     // show total from credit and withdraw
     private fun showTotal(editTextTotal: TextView) {
          val t = creditValue.minus(withdrawValue)
-        editTextTotal.setText(t.toString())
+        editTextTotal.text = t.toString()
         if (t > 0){
             bindingUserData.editTextAvailable.setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
         }else if (t<0){
@@ -292,12 +300,13 @@ class PaymentListFragment : Fragment(), OnItemListener {
     }
 
     // dialog show on date selection
+    @SuppressLint("SimpleDateFormat")
     private fun showDateDialog() {
         val datePickerDialog = DatePickerDialog( // on below line we are passing context.
             requireContext(),
             { view, year, monthOfYear, dayOfMonth -> // on below line we are setting date to our edit text.
                 // binding.editTextJoinDate.setText(dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
-                var cal = Calendar.getInstance()
+                val cal = Calendar.getInstance()
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -341,7 +350,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
 
         viewModel.list2.observe(this){
-            Log.e("TOTAL","Total: ${it[0]}")
+            //Log.e("TOTAL","Total: ${it[0]}")
             if (it.isNotEmpty()) {
                 binding.textView6.text = it[0].toString()
             }

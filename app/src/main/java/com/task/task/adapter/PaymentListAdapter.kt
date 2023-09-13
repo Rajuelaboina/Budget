@@ -1,16 +1,21 @@
-package com.task.task
+package com.task.task.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.task.task.listeners.OnItemListener
+import com.task.task.R
 import com.task.task.databinding.PaymentlistItemBinding
+import com.task.task.model.UserData
 
 class PaymentListAdapter : RecyclerView.Adapter<PaymentListAdapter.MyViewHolder>() {
-    var list = ArrayList<UserData>()
+    private var list = ArrayList<UserData>()
     lateinit var context: Context
+
     fun updateList(userList: List<UserData>) {
         this.list = userList as ArrayList<UserData>
         notifyDataSetChanged()
@@ -30,9 +35,13 @@ class PaymentListAdapter : RecyclerView.Adapter<PaymentListAdapter.MyViewHolder>
         }
         val t = list[position].availableAmount
         if (t > 0){
-            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.green))
+            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,
+                R.color.green
+            ))
         }else if (t<0){
-            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.red))
+            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,
+                R.color.red
+            ))
         }
     }
 
@@ -50,7 +59,7 @@ class PaymentListAdapter : RecyclerView.Adapter<PaymentListAdapter.MyViewHolder>
     companion object{
         lateinit var myListener: OnItemListener
         fun setOnItemSelectedListener(listener : OnItemListener){
-            this.myListener =listener
+            myListener =listener
         }
 
     }

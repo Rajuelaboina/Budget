@@ -6,7 +6,7 @@
     <data>
          <variable
              name="viewModel"
-             type="com.task.task.BankNamesViewModel" />
+             type="com.task.task.viewmodel.BankNamesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +42,7 @@
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="ContentDescription,MissingConstraints" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
