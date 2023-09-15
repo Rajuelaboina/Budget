@@ -1,5 +1,6 @@
 package com.task.task
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings ->
             {
                 showUserDialog()
+
             }
         }
         return true

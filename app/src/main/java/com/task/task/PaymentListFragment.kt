@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -338,7 +337,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
 
         }*/
-
+         
         viewModel.userlist.observe(this){
              binding.progressBar2.visibility = View.GONE
             if (it.size !=0) {
