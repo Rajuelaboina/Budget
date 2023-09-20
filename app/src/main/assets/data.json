@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Axis",
+    "id": 1
+  },
+  {
+    "name": "Citi",
+    "id": 2
+  },
+  {
+  "name": "Sbi",
+  "id": 3
+  },
+  {
+  "name": "Bank of Baroda",
+  "id": 4
+  },
+  {
+    "name": "Icici",
+    "id": 5
+  },
+  {
+    "name": "PayTm Wallet",
+    "id": 6
+  },
+  {
+    "name": "PhonePe Wallet",
+    "id": 7
+  }
+]
