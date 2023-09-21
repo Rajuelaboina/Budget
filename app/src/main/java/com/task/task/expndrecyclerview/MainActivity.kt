@@ -7,7 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.phycae.recyclerviewitemex.databinding.ActivityMainBinding
+import com.task.task.R
+import com.task.task.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MovieViewModel
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil. setContentView(this,R.layout.activity_main)
+        /*binding = DataBindingUtil. setContentView(this, R.layout.activity_main)
         viewModel = ViewModelProvider(this)[MovieViewModel::class.java]
         binding.viewModel = viewModel
         //binding.setVariable(BR.viewModel,viewModel)
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("listData","listData: ${listData}")
             val adapter = MyRecyclerAdapter(applicationContext,listData)
             binding.recyclerView.adapter = adapter
-        })
+        })*/
 
       //  val snapHelper = LinearSnapHelper()
       //  snapHelper.attachToRecyclerView(binding.recyclerView)

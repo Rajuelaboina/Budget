@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.task.task.Constants
+import com.task.task.R
 
 class MyRecyclerAdapter(private val context: Context,private val list:  MutableList<ParentData2>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var selectionPosition = -1

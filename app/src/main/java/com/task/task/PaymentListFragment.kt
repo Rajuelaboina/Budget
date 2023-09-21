@@ -266,6 +266,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
                                 bindingUserData.editTextAvailable.text.toString().trim().toDouble(),
                                 bindingUserData.editTextDate.text.toString().trim() )
                         )
+
                         //firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
                         /*databaseReference=  firebaseDatabase.reference.child("BankExpenses")
                         val pushId = databaseReference.push().getKey()
@@ -276,6 +277,8 @@ class PaymentListFragment : Fragment(), OnItemListener {
                             bindingUserData.editTextDate.text.toString().trim() )
                         )
 */
+                        creditValue = 0.0
+                        withdrawValue = 0.0
                     }
                 }
                 userDialog.dismiss()

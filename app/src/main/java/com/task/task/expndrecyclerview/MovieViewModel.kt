@@ -8,7 +8,7 @@ import retrofit2.Response
 
 class MovieViewModel : ViewModel() {
     private val list= MutableLiveData<List<GroupActivitiesItem>>()
-     var adapter:MyAdapter = MyAdapter()
+     //var adapter:MyAdapter = MyAdapter()
 
     fun getAllMovies(){
         val apiCall = RetrofitRequest.getInstance().create(ApiRequest::class.java)
@@ -19,7 +19,7 @@ class MovieViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<List<GroupActivitiesItem>>, t: Throwable) {
-                list.postValue(null)
+                //list.postValue(null)
             }
 
         })
