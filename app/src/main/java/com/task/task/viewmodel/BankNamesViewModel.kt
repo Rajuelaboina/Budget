@@ -1,6 +1,8 @@
 package com.task.task.viewmodel
 
 import android.content.Context
+import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseApp
@@ -9,14 +11,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.task.task.adapter.PaymentListAdapter
 import com.task.task.database.UserDataBase
-import com.task.task.model.BankNames
 import com.task.task.model.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BankNamesViewModel: ViewModel() {
-    val list = MutableLiveData<List<BankNames>>()
+    var sum = 0
+    val list = MutableLiveData<List<String>>()
+    val monthNamesList = MutableLiveData<List<String>>()
     val userlist = MutableLiveData<List<UserData>>()
     val list2  = MutableLiveData<List<Int>>()
     private lateinit var firebaseDatabase: FirebaseDatabase
@@ -58,8 +61,12 @@ class BankNamesViewModel: ViewModel() {
 
         }
     }
-    fun setAdapter(userList: List<UserData>) {
-        adapter.updateList(userList)
+    fun setAdapter(
+        userList: List<UserData>,
+        viewModel: BankNamesViewModel,
+        requireActivity: FragmentActivity
+    ) {
+        adapter.updateList(userList,viewModel,requireActivity)
     }
     fun getAdapter(): PaymentListAdapter {
         return adapter
@@ -73,8 +80,23 @@ class BankNamesViewModel: ViewModel() {
             val sumTotal = UserDataBase.getInstance(context).userDao().getTotalOfSum()
             list2.postValue(listOf(sumTotal))
           //  Log.e("GRAND TOTAL","TOTAL: "+UserDataBase.getInstance(context).userDao().getTotalOfSum())
+
         }
 
+    }
+    fun getSumOfMonth(context: Context,name:String){
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+           var sum1 = UserDataBase.getInstance(context).userDao().getAvailableOfSum(name)
+            monthNamesList.postValue(listOf(sum1.toString()))
+
+            sum = sum1
+        }
+        Log.e("monthofsum", "someofmonth: $sum")
+    }
+    fun getsum(): Int{
+        return sum
     }
 
 }

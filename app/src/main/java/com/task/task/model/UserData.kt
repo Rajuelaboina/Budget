@@ -24,5 +24,7 @@ data class UserData(
     val availableAmount:Double,
 
     @ColumnInfo(name = "date")
-    val date:String
+    val date:String,
+    @ColumnInfo(name = "remarks")
+      val remarks:String
    )

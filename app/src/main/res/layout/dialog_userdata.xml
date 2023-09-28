@@ -90,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:text="0.0"
                 android:hint="@string/credit_amount"
                 android:importantForAutofill="no"
                 android:inputType="number"
@@ -130,6 +131,7 @@
                 tools:ignore="MissingConstraints,DuplicateSpeakableTextCheck,TouchTargetSizeCheck,VisualLintTextFieldSize"
                 tools:targetApi="o"
                 android:textColor="@color/red"
+                android:text="0.0"
                 android:textColorHint="@color/red"
                 android:imeOptions="actionDone"/>
         </LinearLayout>
@@ -199,6 +201,17 @@
                 tools:targetApi="o"
                 android:imeOptions="actionDone"/>
         </LinearLayout>
+        <EditText
+            android:id="@+id/editTextTextMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="@android:drawable/editbox_background"
+            android:text="Remarks"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionDone"/>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_payment"
@@ -210,6 +223,8 @@
             android:layout_gravity="center"
             app:cornerRadius="20dp"
             android:layout_marginBottom="4dp"/>
+
+
 
     </LinearLayout>
 </layout>

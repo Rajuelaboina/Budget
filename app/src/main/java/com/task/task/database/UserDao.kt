@@ -2,6 +2,7 @@ package com.task.task.database
 
 import androidx.room.*
 import com.task.task.model.BankNames
+import com.task.task.model.BankNames2
 import com.task.task.model.UserData
 
 @Dao
@@ -12,8 +13,9 @@ interface UserDao {
      @Query("SELECT EXISTS(SELECT * FROM bank WHERE BankName = :BankName )")
      fun isBankExists(BankName: String): Boolean
 
-    @Query("SELECT * FROM bank")
-    fun getAllBankNames(): List<BankNames>
+    //@Query("SELECT * FROM bank")
+    @Query("SELECT BankName FROM bank")
+    fun getAllBankNames(): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUserData(userData: UserData)
@@ -35,4 +37,7 @@ interface UserDao {
 
     @Query("SELECT SUM(availableAmount) FROM userData")
     fun getTotalOfSum():Int
+    @Query("SELECT SUM(availableAmount) FROM userData WHERE bankname = :bankname")
+    fun getAvailableOfSum(bankname: String):Int
+
 }

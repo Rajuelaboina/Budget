@@ -7,12 +7,13 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.TextView
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
-import com.task.task.adapter.BankSpinnerAdapter
 import com.task.task.adapter.PaymentListAdapter
 import com.task.task.database.UserDataBase
 import com.task.task.databinding.DialogUserdataBinding
@@ -58,7 +58,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
     private var banknameList = mutableListOf<String>()
     private var creditValue = 0.0
     private var withdrawValue  = 0.0
-
+    var bankablBalance = ""
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[BankNamesViewModel::class.java]
         _binding = FragmentPaymentlistBinding.inflate(inflater, container, false)
@@ -161,12 +161,15 @@ class PaymentListFragment : Fragment(), OnItemListener {
         adapter.notifyDataSetChanged()*/
         viewModel.getBankNames(requireContext())
         viewModel.list.observe(this){
-            val adapter = BankSpinnerAdapter(requireContext(),it)
+           // val adapter = BankSpinnerAdapter(requireContext(),it)
+            //Log.e("Spinner ","spinnerList: $it")
+            banknameList.addAll(it)
+            val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,it)
             bindingUserData.spinnerMonth.adapter = adapter
             adapter.notifyDataSetChanged()
-            for (x in it.indices ){
+           /* for (x in it.indices ){
                 banknameList.add(it[x].name)
-            }
+            }*/
             //Log.e("SIZE","${banknameList.size}")
             if (position != -1) {
                 for (x in banknameList.indices) {
@@ -193,6 +196,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
             bindingUserData.editTextwithdraw.setText(paymentList[position].withdrawAmount.toString())
             bindingUserData.editTextAvailable.setText(paymentList[position].availableAmount.toString())
             bindingUserData.editTextDate.setText(paymentList[position].date)
+            bindingUserData.editTextTextMultiLine.setText(paymentList[position].remarks)
         }
         bindingUserData.editTextwithdraw.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -201,11 +205,14 @@ class PaymentListFragment : Fragment(), OnItemListener {
              //   Log.e("SSSSS","s:${s.toString().length}")
                 if (s.toString().isNotEmpty()) {
                     withdrawValue = s.toString().trim().toDouble()
-                    showTotal(bindingUserData.editTextAvailable)
+
+                    showTotal(withdrawValue,creditValue)
                 }else if (s.toString().isEmpty()){
                     withdrawValue = 0.0
-                    showTotal(bindingUserData.editTextAvailable)
+
+                    showTotal(withdrawValue,creditValue)
                 }
+
             }
             override fun afterTextChanged(s: Editable?) {
 
@@ -217,11 +224,14 @@ class PaymentListFragment : Fragment(), OnItemListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().isNotEmpty()) {
                     creditValue = s.toString().trim().toDouble()
-                    showTotal(bindingUserData.editTextAvailable)
+
+                    showTotal(withdrawValue,creditValue)
                 }else if (s.toString().isEmpty()){
-                    withdrawValue = 0.0
-                    showTotal(bindingUserData.editTextAvailable)
+                    creditValue = 0.0
+
+                    showTotal(withdrawValue,creditValue)
                 }
+
             }
             override fun afterTextChanged(s: Editable?) {
 
@@ -231,8 +241,15 @@ class PaymentListFragment : Fragment(), OnItemListener {
 
         bindingUserData.spinnerMonth.onItemSelectedListener = object :OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
-               // bankName = parent?.getItemAtPosition(position).toString()
-                bankName =banknameList[position]
+                bankName = parent?.getItemAtPosition(position).toString()
+               // bankName =banknameList[position]
+                viewModel.getSumOfMonth(requireContext(),bankName)
+                 viewModel.monthNamesList.observe(this@PaymentListFragment){
+                     bankablBalance =it[0]
+                     bindingUserData.editTextAvailable.setText(bankablBalance)
+                 }
+                bindingUserData. textViewTotal.setText(bankName+" Available balance")
+
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -252,7 +269,8 @@ class PaymentListFragment : Fragment(), OnItemListener {
                                 bindingUserData.editTextCredit.text.toString().trim().toDouble(),
                                 bindingUserData.editTextwithdraw.text.toString().trim().toDouble(),
                                 bindingUserData.editTextAvailable.text.toString().trim().toDouble(),
-                                bindingUserData.editTextDate.text.toString().trim())
+                                bindingUserData.editTextDate.text.toString().trim(),
+                                bindingUserData.editTextTextMultiLine.text.toString().trim())
                         )
                     }
                 }else{
@@ -264,7 +282,8 @@ class PaymentListFragment : Fragment(), OnItemListener {
                                 creditValue,
                                 withdrawValue,
                                 bindingUserData.editTextAvailable.text.toString().trim().toDouble(),
-                                bindingUserData.editTextDate.text.toString().trim() )
+                                bindingUserData.editTextDate.text.toString().trim(),
+                                bindingUserData.editTextTextMultiLine.text.toString().trim())
                         )
 
                         //firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -291,12 +310,18 @@ class PaymentListFragment : Fragment(), OnItemListener {
     }
 
     // show total from credit and withdraw
-    private fun showTotal(editTextTotal: TextView) {
-         val t = creditValue.minus(withdrawValue)
-        editTextTotal.text = t.toString()
-        if (t > 0){
+    private fun showTotal(withdrawValue: Double, creditValue: Double) {
+         var t = creditValue.minus(withdrawValue)
+      /*  Log.e("SSSSS","sw: $withdrawValue")
+        Log.e("SSSSS","sc: $creditValue")
+        Log.e("SSSSS","st: $t")*/
+
+        var gt = t.plus(bankablBalance.toDouble())
+        Log.e("SSSSS","gt: $gt")
+        bindingUserData.editTextAvailable.setText(gt.toString())
+        if (gt > 0){
             bindingUserData.editTextAvailable.setTextColor(ContextCompat.getColor(requireContext(),R.color.green))
-        }else if (t<0){
+        }else if (gt<0){
           bindingUserData.editTextAvailable.setTextColor(ContextCompat.getColor(requireContext(),R.color.red))
         }
     }
@@ -344,7 +369,7 @@ class PaymentListFragment : Fragment(), OnItemListener {
         viewModel.userlist.observe(this){
              binding.progressBar2.visibility = View.GONE
             if (it.size !=0) {
-                viewModel.setAdapter(it)
+                viewModel.setAdapter(it,viewModel,requireActivity())
                 paymentList = it as ArrayList<UserData>
                 binding.linearLayout2.visibility = View.VISIBLE
             }
@@ -355,6 +380,11 @@ class PaymentListFragment : Fragment(), OnItemListener {
             //Log.e("TOTAL","Total: ${it[0]}")
             if (it.isNotEmpty()) {
                 binding.textView6.text = it[0].toString()
+                if (it[0] > 0){
+                    binding.textView6.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+                }else if (it[0] < 0){
+                    binding.textView6.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                }
             }
         }
 
