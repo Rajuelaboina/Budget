@@ -73,12 +73,13 @@ class BankNamesViewModel: ViewModel() {
     }
     fun getTotal(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
-           // val total = UserDataBase.getInstance(context).userDao().getSum()
-           // val total2 = UserDataBase.getInstance(context).userDao().getSum2()
+            val total = UserDataBase.getInstance(context).userDao().getSum()
+           val total2 = UserDataBase.getInstance(context).userDao().getSum2()
 
-           // val sumTotal = total+total2
+            val remainAmount = total-total2
+            Log.e("remainAmount","remainAmount: "+remainAmount)
             val sumTotal = UserDataBase.getInstance(context).userDao().getTotalOfSum()
-            list2.postValue(listOf(sumTotal))
+            list2.postValue(listOf(remainAmount))
           //  Log.e("GRAND TOTAL","TOTAL: "+UserDataBase.getInstance(context).userDao().getTotalOfSum())
 
         }

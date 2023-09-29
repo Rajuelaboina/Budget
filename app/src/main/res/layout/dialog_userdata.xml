@@ -210,6 +210,10 @@
             android:text="Remarks"
             android:gravity="start|top"
             android:inputType="textMultiLine"
+            android:singleLine="true"
+            android:importantForAutofill="no"
+            tools:ignore="MissingConstraints,TouchTargetSizeCheck,VisualLintTextFieldSize"
+            tools:targetApi="o"
             android:imeOptions="actionDone"/>
 
 
