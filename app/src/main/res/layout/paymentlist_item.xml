@@ -137,6 +137,34 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/red"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:padding="5dp"
+                android:paddingStart="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/remarks_textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remark = "
+                    android:textStyle="normal"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:maxLines="1"
+                    />
+
+                <TextView
+                    android:id="@+id/remarks_textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.remarks}"
+                    android:textSize="18sp"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    />
+            </LinearLayout>
            <!-- <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
@@ -148,7 +176,7 @@
                 android:background="?android:attr/listDivider" />-->
 
             <LinearLayout
-                android:background="@drawable/background"
+                android:background="@drawable/background2"
                 android:padding="5dp"
                 android:paddingStart="8dp"
                 android:layout_width="match_parent"

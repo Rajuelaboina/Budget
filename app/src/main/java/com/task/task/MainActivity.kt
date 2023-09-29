@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+       getSupportActionBar()?.setDisplayShowHomeEnabled(true)
+       getSupportActionBar()?.setLogo(R.drawable.ic_logo1)
+       getSupportActionBar()?.setDisplayUseLogoEnabled(true)
+
 
        /* firebaseDatabase = FirebaseDatabase.getInstance("https://task-206a6-default-rtdb.asia-southeast1.firebasedatabase.app")
         databaseReference=  firebaseDatabase.reference.child("BankExpenses")
