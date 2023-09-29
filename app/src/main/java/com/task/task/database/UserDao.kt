@@ -40,4 +40,10 @@ interface UserDao {
     @Query("SELECT SUM(availableAmount) FROM userData WHERE bankname = :bankname")
     fun getAvailableOfSum(bankname: String):Int
 
+    @Query("SELECT SUM(creditAmount) FROM userData WHERE bankname = :bankname")
+    fun getAvailableCreditMonth(bankname: String):Int
+
+    @Query("SELECT SUM(withdrawAmount) FROM userData WHERE bankname = :bankname")
+    fun getAvailableWithdrawMonth(bankname: String):Int
+
 }

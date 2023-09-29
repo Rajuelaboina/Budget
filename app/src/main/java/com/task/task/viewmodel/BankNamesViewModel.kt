@@ -77,7 +77,7 @@ class BankNamesViewModel: ViewModel() {
            val total2 = UserDataBase.getInstance(context).userDao().getSum2()
 
             val remainAmount = total-total2
-            Log.e("remainAmount","remainAmount: "+remainAmount)
+            //Log.e("remainAmount","remainAmount: "+remainAmount)
             val sumTotal = UserDataBase.getInstance(context).userDao().getTotalOfSum()
             list2.postValue(listOf(remainAmount))
           //  Log.e("GRAND TOTAL","TOTAL: "+UserDataBase.getInstance(context).userDao().getTotalOfSum())
@@ -89,12 +89,18 @@ class BankNamesViewModel: ViewModel() {
 
         CoroutineScope(Dispatchers.IO).launch {
 
-           var sum1 = UserDataBase.getInstance(context).userDao().getAvailableOfSum(name)
-            monthNamesList.postValue(listOf(sum1.toString()))
+            val creditotal = UserDataBase.getInstance(context).userDao().getAvailableCreditMonth(name)
+            val withdrawtotal = UserDataBase.getInstance(context).userDao().getAvailableWithdrawMonth(name)
+            Log.e("creditotal", "creditotal: $creditotal")
+            Log.e("creditotal2", "creditotal2: $withdrawtotal")
+            val availableAmount = creditotal-withdrawtotal
+            Log.e("creditotal2", "creditotal2<>availableAmount: $availableAmount")
+            var sum1 = UserDataBase.getInstance(context).userDao().getAvailableOfSum(name)
+            monthNamesList.postValue(listOf(availableAmount.toString()))
 
-            sum = sum1
+            //sum = sum1
         }
-        Log.e("monthofsum", "someofmonth: $sum")
+       // Log.e("monthofsum", "someofmonth: $sum")
     }
     fun getsum(): Int{
         return sum
