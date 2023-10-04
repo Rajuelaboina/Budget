@@ -61,11 +61,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
          when (item.itemId) {
-            R.id.action_settings ->
-            {
-                showUserDialog()
+            R.id.action_settings ->  showUserDialog()
 
-            }
+
+             R.id.action_delete -> startActivity(Intent(this,SettingActivity::class.java))
         }
         return true
     }

@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.task.task.adapter.PaymentListAdapter
 import com.task.task.database.UserDataBase
+import com.task.task.model.BankNames
 import com.task.task.model.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class BankNamesViewModel: ViewModel() {
     var sum = 0
     val list = MutableLiveData<List<String>>()
+    val list_bankNames = MutableLiveData<List<BankNames>>()
     val monthNamesList = MutableLiveData<List<String>>()
     val userlist = MutableLiveData<List<UserData>>()
     val list2  = MutableLiveData<List<Int>>()
@@ -31,7 +33,7 @@ class BankNamesViewModel: ViewModel() {
     fun getBankNames(context: Context){
         CoroutineScope(Dispatchers.IO).launch {
             list.postValue(UserDataBase.getInstance(context).userDao().getAllBankNames())
-              FirebaseApp.initializeApp(context)
+            //  FirebaseApp.initializeApp(context)
             /*firebaseFireStore = FirebaseFirestore.getInstance()
             firebaseFireStore.collection("BankNames").get().addOnSuccessListener {
                 banknameList.clear()
@@ -104,6 +106,13 @@ class BankNamesViewModel: ViewModel() {
     }
     fun getsum(): Int{
         return sum
+    }
+
+    fun getBankNames2(context: Context){
+        CoroutineScope(Dispatchers.IO).launch {
+            list_bankNames.postValue(UserDataBase.getInstance(context).userDao().getBankNames())
+
+        }
     }
 
 }

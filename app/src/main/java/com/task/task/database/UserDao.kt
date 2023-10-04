@@ -46,4 +46,10 @@ interface UserDao {
     @Query("SELECT SUM(withdrawAmount) FROM userData WHERE bankname = :bankname")
     fun getAvailableWithdrawMonth(bankname: String):Int
 
+    @Query("DELETE FROM bank WHERE id = :id")
+    fun deleteBank(id: String)
+
+    @Query("SELECT * FROM bank")
+    fun getBankNames(): List<BankNames>
+
 }
