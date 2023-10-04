@@ -41,11 +41,17 @@ class SettingActivity : AppCompatActivity() {
             alertDialog.setCancelable(false).setPositiveButton("Yes",object : DialogInterface.OnClickListener{
                     override fun onClick(dialog: DialogInterface?, which: Int) {
 
+
+
                         CoroutineScope(Dispatchers.IO).launch {
                             val name = parent.getItemIdAtPosition(position).toString()
                             UserDataBase.getInstance(applicationContext).userDao().deleteBank(list[position].id.toString())
 
                         }
+
+
+
+
                         showAdapter()
                     }
 
