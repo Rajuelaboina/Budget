@@ -30,6 +30,13 @@
         <item name = "android:foreground"> @drawable/baseline_add_24 </item>
         <item name="backgroundTint">@color/purple_700</item>
     </style>
+
+    <style name="floatingAdd2" parent="Widget.Design.FloatingActionButton">
+        <item name = "android:foreground"> @drawable/assign02</item>
+        <item name="backgroundTint">@color/ash</item>
+
+    </style>
+
     <style name="RoundShapeTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <item name="shapeAppearanceMediumComponent">@style/RoundShapeAppearance</item>
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>

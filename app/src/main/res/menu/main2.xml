@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.task.task.MainActivity">
+    <item android:id="@+id/bnbMenuHome"
+        android:title="Home"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_home_24"/>
+
+    <item android:id="@+id/bnbMenuSearch"
+        app:showAsAction="always"
+        android:title="Search"
+        android:icon="@drawable/baseline_workspaces_24"/>
+
+    <item android:id="@+id/bnbMenuPerson"
+        app:showAsAction="always"
+        android:title="Profile"
+        android:icon="@drawable/baseline_local_bar_24"/>
+
+    <item android:id="@+id/bnbMenuSetting"
+        app:showAsAction="always"
+        android:title="Setting"
+        android:icon="@drawable/baseline_account_circle_24"/>
+</menu>
