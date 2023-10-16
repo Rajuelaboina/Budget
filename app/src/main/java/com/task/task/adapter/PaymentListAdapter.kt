@@ -52,11 +52,11 @@ class PaymentListAdapter : RecyclerView.Adapter<PaymentListAdapter.MyViewHolder>
 
         //holder.binding.textViewAvailableBalance.text = viewModel.sum.toString()
         if (t > 0){
-            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,
+            holder.binding.textViewAvailable.setTextColor(ContextCompat.getColor(holder.itemView.context,
                 R.color.green
             ))
         }else if (t<0){
-            holder.binding.textViewAvailableBalance.setTextColor(ContextCompat.getColor(holder.itemView.context,
+            holder.binding.textViewAvailable.setTextColor(ContextCompat.getColor(holder.itemView.context,
                 R.color.red
             ))
         }

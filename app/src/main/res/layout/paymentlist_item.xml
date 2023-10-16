@@ -187,14 +187,14 @@
                     android:id="@+id/textViewAvailable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text='@{ model.bankname.toUpperCase() +" "+ "Available Balance = "}'
+                    android:text='@{ model.bankname.toUpperCase() +"\r\n "+ "Available Balance = "+Double.toString(model.availableAmount)}'
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="18sp"
-                    android:maxLines="1"
+                    android:maxLines="3"
                     android:textColor="@color/green"/>
                 <!--\u20B9-->
 
-                <TextView
+               <!-- <TextView
                     android:id="@+id/textViewAvailableBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/green"/>
+                    android:textColor="@color/green"/>-->
             </LinearLayout>
 
         </LinearLayout>
